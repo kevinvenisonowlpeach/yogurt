@@ -6,7 +6,9 @@ packages:
 catalogMode: prefer
 
 catalog:
+  '@tailwindcss/vite': ^4.3.3
   "@types/node": ^24
+  tailwindcss: ^4.3.3
   typescript: ^7.0.2
   vite: npm:@voidzero-dev/vite-plus-core@0.3.3
   vite-plus: 0.3.3
@@ -30,5 +32,5 @@ minimumReleaseAgeExclude:
   - vite-plus@0.3.3
 allowBuilds:
   electron: true
-  electron-winstaller: set this to true or false
-  esbuild: set this to true or false
+  electron-winstaller: true
+  esbuild: true

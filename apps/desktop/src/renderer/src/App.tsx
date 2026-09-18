@@ -6,6 +6,7 @@ function App(): React.JSX.Element {
 
   return (
     <>
+      <p className="text-9xl">Hello World!</p>
       <img alt="logo" className="logo" src={electronLogo} />
       <div className="creator">Powered by electron-vite</div>
       <div className="text">
