@@ -28,3 +28,7 @@ minimumReleaseAgeExclude:
   - "@voidzero-dev/vite-plus-win32-arm64-msvc@0.3.3"
   - "@voidzero-dev/vite-plus-win32-x64-msvc@0.3.3"
   - vite-plus@0.3.3
+allowBuilds:
+  electron: true
+  electron-winstaller: set this to true or false
+  esbuild: set this to true or false
