@@ -1,10 +1,19 @@
-import { app, shell, BrowserWindow, ipcMain, screen } from "electron";
-import { join } from "path";
-import { electronApp, optimizer, is } from "@electron-toolkit/utils";
-import icon from "../../resources/icon.png?asset";
+import { createZai } from "@ai-sdk/zai";
+import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { IS_OVERLAY_KEY } from "@shared/constants";
+import { generateText } from "ai";
+import "dotenv/config";
+import { app, BrowserWindow, ipcMain, screen, shell } from "electron";
+import { join } from "path";
+import icon from "../../resources/icon.png?asset";
+import { env } from "./env";
 
 const INDEX_HTML_FILE_PATH_STRING = join(__dirname, "../renderer/index.html");
+
+const zai = createZai({
+  apiKey: env.ZAI_API_KEY,
+  baseURL: "https://api.z.ai/api/coding/paas/v4",
+});
 
 function createWindow(): void {
   // Create the browser window.
@@ -57,7 +66,18 @@ app.whenReady().then(() => {
   });
 
   // IPC test
-  ipcMain.on("ping", () => console.log("pong"));
+  ipcMain.on("send", async () => {
+    try {
+      const { text } = await generateText({
+        model: zai("glm-5.3-flash"),
+        prompt: "Hello World!",
+      });
+
+      console.log(text);
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
   createWindow();
   // create overlay

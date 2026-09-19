@@ -21,18 +21,23 @@
     "build:linux": "electron-vite build && electron-builder --linux"
   },
   "dependencies": {
+    "@ai-sdk/zai": "catalog:",
     "@base-ui/react": "catalog:",
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "@fontsource-variable/geist": "catalog:",
+    "@t3-oss/env-core": "catalog:",
     "@tailwindcss/vite": "catalog:",
+    "ai": "^7.0.106",
     "class-variance-authority": "catalog:",
     "cn": "catalog:",
+    "dotenv": "^18.0.0",
     "electron-updater": "^6.3.9",
     "lucide-react": "catalog:",
     "shadcn": "catalog:",
     "tailwindcss": "catalog:",
-    "tw-animate-css": "catalog:"
+    "tw-animate-css": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^2.0.0",
