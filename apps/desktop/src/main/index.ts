@@ -1,7 +1,10 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron";
+import { app, shell, BrowserWindow, ipcMain, screen } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
+import { IS_OVERLAY_KEY } from "@shared/constants";
+
+const INDEX_HTML_FILE_PATH_STRING = join(__dirname, "../renderer/index.html");
 
 function createWindow(): void {
   // Create the browser window.
@@ -34,7 +37,7 @@ function createWindow(): void {
     mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
   } else {
     // oxlint-disable-next-line typescript/no-floating-promises
-    mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
+    mainWindow.loadFile(INDEX_HTML_FILE_PATH_STRING);
   }
 }
 
@@ -57,6 +60,43 @@ app.whenReady().then(() => {
   ipcMain.on("ping", () => console.log("pong"));
 
   createWindow();
+  // create overlay
+  {
+    const { width, height } = screen.getPrimaryDisplay().size;
+    const window = new BrowserWindow({
+      x: 0,
+      y: 0,
+      width,
+      height,
+      frame: false,
+      transparent: true,
+      backgroundColor: "#00000000",
+      alwaysOnTop: true,
+      skipTaskbar: true,
+      focusable: true,
+      webPreferences: {
+        preload: join(__dirname, "../preload/index.js"),
+        sandbox: false,
+      },
+    });
+    window.setIgnoreMouseEvents(true, {
+      forward: true,
+    });
+
+    const ELECTRON_RENDERER_URL = process.env["ELECTRON_RENDERER_URL"];
+
+    if (is.dev && ELECTRON_RENDERER_URL) {
+      const url = new URL(ELECTRON_RENDERER_URL);
+      url.searchParams.set(IS_OVERLAY_KEY, "true");
+      void window.loadURL(url.toString());
+    } else {
+      void window.loadFile(INDEX_HTML_FILE_PATH_STRING, { query: { [IS_OVERLAY_KEY]: "true" } });
+    }
+
+    window.webContents.on("did-finish-load", () =>
+      window.webContents.openDevTools({ mode: "detach" }),
+    );
+  }
 
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the

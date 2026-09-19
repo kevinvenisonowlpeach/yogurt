@@ -1,6 +1,8 @@
 import { contextBridge } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
 
+export const IS_OVERLAY_KEY = "isOverlay";
+
 // Custom APIs for renderer
 const api = {};
 
